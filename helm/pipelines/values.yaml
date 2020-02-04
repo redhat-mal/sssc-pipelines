@@ -1,0 +1,19 @@
+# Default values for pipelines.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+namespace: "sssc-tools"
+
+pipeline:
+  source_repo_url: "https://github.com/redhat-mal/sssc-pipelines.git"
+  source_repo_ref: "master"
+  source_context_dir: ""
+  file_name: "Jenkinsfile.tomcat"
+  agent:
+    image: ""
+
+application:
+  source_repo_url: "https://github.com/jboss-developer/ticket-monster.git"
+  source_repo_ref: "2.7.0.Final-with-tutorials"
+  repo_webhook_secret: "abc123"
+  source_context_dir: "demo"
