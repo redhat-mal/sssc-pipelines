@@ -4,13 +4,16 @@ pipeline {
 	    label "maven-skopeo-agent"
 	    cloud "openshift"
 	    inheritFrom "maven"
+        serviceAccount 'jenkins'
 	    containerTemplate {
-		name "jnlp"
-		image "registry.redhat.io/openshift4/ose-jenkins-agent-maven"
-		resourceRequestMemory "2Gi"
-		resourceLimitMemory "2Gi"
-		resourceRequestCpu "2"
-		resourceLimitCpu "2"
+		  name "jnlp"
+		  image "registry.redhat.io/openshift4/ose-jenkins-agent-maven"
+		  resourceRequestMemory "2Gi"
+		  resourceLimitMemory "2Gi"
+		  resourceRequestCpu "2"
+		  resourceLimitCpu "2"
+          ttyEnabled false
+          args '${computer.jnlpmac} ${computer.name}'
 	    }
 	  }
     }
