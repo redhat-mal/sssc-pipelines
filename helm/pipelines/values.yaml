@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-namespace: "sssc-tools"
+namespace: "sssc-demo"
 
 pipeline:
   source_repo_url: "https://github.com/redhat-mal/sssc-pipelines.git"

@@ -26,12 +26,13 @@ spec:
         secret: {{ .Values.application.repo_webhook_secret }}
   runPolicy: Serial
   strategy:
+    type: "JenkinsPipeline"
     jenkinsPipelineStrategy:
       jenkinsfilePath: {{ .Values.pipeline.file_name }}
       env:
       - name: "APPLICATION_SOURCE_REPO"
-        value: "{{ .Values.application.source_repo_ref }}"
+        value: "{{ .Values.application.source_repo_url }}"
       - name: "APPLICATION_SOURCE_REF"
         value: "{{ .Values.application.source_repo_ref }}"
       - name: "BUILD_CONTEXT_DIR"
-        value: "{{ .Values.application.context_dir }}"
+        value: "{{ .Values.application.source_context_dir }}"

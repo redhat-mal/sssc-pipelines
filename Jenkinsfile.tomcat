@@ -15,7 +15,7 @@ pipeline {
 	  }
     }
     environment { 
-	// Define global variables
+	// Define global varitempables
 	// Set Maven command to always include Nexus Settings
 	// NOTE: Somehow an inline pod template in a declarative pipeline
 	//       needs the "scl_enable" before calling maven.
@@ -63,13 +63,10 @@ pipeline {
 	// Using Maven call SonarQube for Code Analysis
 	stage('Code Analysis') {
 	    steps {
-		dir('openshift-tasks') {
-		    script {
+
 			echo "Running Code Analysis"
 			sh "${mvnCmd} sonar:sonar -Dsonar.host.url=http://homework-sonarqube.apps.shared.na.openshift.opentlc.com -Dsonar.projectName=${GUID}-${JOB_BASE_NAME}-${devTag} -Dsonar.projectVersion=${devTag}"
-		    }
-		}
-	    }
+		 }
 	}
-
+  }
 }
