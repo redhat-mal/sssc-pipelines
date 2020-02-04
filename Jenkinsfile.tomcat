@@ -8,9 +8,9 @@ pipeline {
 	    containerTemplate {
 		  name "jnlp"
 		  image "registry.redhat.io/openshift4/ose-jenkins-agent-maven"
-		  //resourceRequestMemory "2Gi"
+		  resourceRequestMemory "1Gi"
 		  resourceLimitMemory "2Gi"
-		  //resourceRequestCpu "2"
+		  resourceRequestCpu "1"
 		  resourceLimitCpu "2"
           ttyEnabled false
           args '${computer.jnlpmac} ${computer.name}'
