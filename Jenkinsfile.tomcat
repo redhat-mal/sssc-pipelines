@@ -28,7 +28,7 @@ pipeline {
     agent { label 'maven' }
     environment { 
       pomFile = "${BUILD_CONTEXT_DIR}" ? "${BUILD_CONTEXT_DIR}/pom.xml" : "pom.xml"
-      buildTarget = ${BUILD_CONTEXT_DIR}  "${BUILD_CONTEXT_DIR}/target" : "target"
+      buildTarget = ${BUILD_CONTEXT_DIR} ? "${BUILD_CONTEXT_DIR}/target" : "target"
       appNAME = "${JOB_NAME}".replaceAll(/-build.*/, '')
 
     }
