@@ -7,7 +7,7 @@ pipeline {
         serviceAccount 'jenkins'
 	    containerTemplate {
 		  name "jnlp"
-		  image "registry.redhat.io/openshift4/ose-jenkins-agent-maven"
+		  image "image-registry.openshift-image-registry.svc:5000/openshift/jenkins-agent-maven:latest"
 		  resourceRequestMemory "1Gi"
 		  resourceLimitMemory "2Gi"
 		  resourceRequestCpu "200m"
@@ -17,6 +17,7 @@ pipeline {
 	    }
 	  }
     }
+    agent { label 'maven' }
     environment { 
 	// Define global varitempables
 	// Set Maven command to always include Nexus Settings
