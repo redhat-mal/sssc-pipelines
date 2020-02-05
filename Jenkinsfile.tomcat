@@ -39,7 +39,7 @@ pipeline {
     //}
     agent { label 'maven' }
     environment { 
-
+      mvnCmd = "mvn -s ./nexus_settings.xml"
     }
     stages {
 	// Checkout Source Code.
