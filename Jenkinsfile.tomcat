@@ -6,6 +6,18 @@ retriever: modernSCM(
   ]
 )
 
+openshift.withCluster() {
+  env.POM_FILE = env.BUILD_CONTEXT_DIR ? "${env.BUILD_CONTEXT_DIR}/pom.xml" : "pom.xml"
+  env.TARGET = env.BUILD_CONTEXT_DIR ? "${env.BUILD_CONTEXT_DIR}/target" : "target"
+  env.APP_NAME = "${JOB_NAME}".replaceAll(/-build.*/, '')
+  env.BUILD = openshift.project()
+  env.DEV = "${APP_NAME}-dev"
+  env.STAGE = "${APP_NAME}-stage"
+  env.PROD = "${APP_NAME}-prod"
+  echo "Starting Pipeline for ${APP_NAME}..."
+}
+
+
 pipeline {
     //agent {
 	//  kubernetes {
@@ -27,9 +39,6 @@ pipeline {
     //}
     agent { label 'maven' }
     environment { 
-      pomFile = "${BUILD_CONTEXT_DIR}" ? "${BUILD_CONTEXT_DIR}/pom.xml" : "pom.xml"
-      buildTarget = "${BUILD_CONTEXT_DIR}" ? "${BUILD_CONTEXT_DIR}/target" : "target"
-      appNAME = "${JOB_NAME}".replaceAll(/-build.*/, '')
 
     }
     stages {
@@ -43,14 +52,14 @@ pipeline {
 	// Build the Tasks Application in the directory 'openshift-tasks'
 	stage('Build war') {
       steps {
-        sh "mvn -B clean install -DskipTests=true -f ${pomFile}"
+        sh "mvn -B clean install -DskipTests=true -f ${POM_FILE}"
       }
 	}
 
 	// Using Maven run the unit tests
 	stage('Unit Tests') {
       steps {
-        sh "mvn -B test -f ${pomFile}"
+        sh "mvn -B test -f ${POM_FILE}"
       }
 	}
 	// Using Maven call SonarQube for Code Analysis
