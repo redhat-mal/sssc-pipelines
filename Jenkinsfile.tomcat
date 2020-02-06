@@ -66,7 +66,8 @@ pipeline {
 	stage('Code Analysis') {
 		//sh "${mvnCmd} sonar:sonar -Dsonar.host.url=http://homework-sonarqube.apps.shared.na.openshift.opentlc.com -Dsonar.projectName=${GUID}-${JOB_BASE_NAME}-${devTag} -Dsonar.projectVersion=${devTag}"
       steps {
-        withSonarQubeEnv(installationName: 'sonar', credentialsId: 'sonar') {
+        //, credentialsId: 'sonar'
+        withSonarQubeEnv(installationName: 'sonar') {
           sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar -f ${POM_FILE}'
         }
 	  }
