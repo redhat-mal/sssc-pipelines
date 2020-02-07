@@ -37,40 +37,56 @@ pipeline {
 	//    }
 	//  }
     //}
-    agent { label 'maven' }
-    environment { 
+  agent { label 'maven' }
+  environment { 
       mvnCmd = "mvn -s ./nexus_settings.xml"
-    }
-    stages {
-	// Checkout Source Code.
-	stage('Checkout Source') {
+  }
+  stages {
+	  // Checkout Source Code.
+	  stage('Checkout Source') {
 	    steps {
           git url: "${APPLICATION_SOURCE_REPO}", branch: "${APPLICATION_SOURCE_REF}"
-        }
-	}
+      }
+	  }
 
-	// Build the Tasks Application in the directory 'openshift-tasks'
-	stage('Build war') {
+	  // Build the Tasks Application in the directory 'openshift-tasks'
+	  stage('Build war') {
       steps {
         sh "mvn -B clean install -DskipTests=true -f ${POM_FILE}"
       }
-	}
+	  }
 
-	// Using Maven run the unit tests
-	stage('Unit Tests') {
+	  // Using Maven run the unit tests
+	  stage('Unit Tests') {
       steps {
         sh "mvn -B test -f ${POM_FILE}"
       }
-	}
-	// Using Maven call SonarQube for Code Analysis
-	stage('Code Analysis') {
-		//sh "${mvnCmd} sonar:sonar -Dsonar.host.url=http://homework-sonarqube.apps.shared.na.openshift.opentlc.com -Dsonar.projectName=${GUID}-${JOB_BASE_NAME}-${devTag} -Dsonar.projectVersion=${devTag}"
+	  }
+	  // Using Maven call SonarQube for Code Analysis
+	  stage('Code Analysis') {
+
       steps {
         //, credentialsId: 'sonar'
         withSonarQubeEnv(installationName: 'sonar') {
           sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar -f ${POM_FILE}'
         }
+	    }
 	  }
-	}
+
+	  // Using Build Image
+	  stage('Build Image') {
+      steps {
+        sh """
+          ls ${TARGET}/*
+          rm -rf oc-build && mkdir -p oc-build/deployments
+          for t in \$(echo "jar;war;ear" | tr ";" "\\n"); do
+            cp -rfv ./${TARGET}/*.\$t oc-build/deployments/ 2> /dev/null || echo "No \$t files"
+          done
+        """
+        binaryBuild(projectName: env.BUILD, buildConfigName: env.APP_NAME, buildFromPath: "oc-build")
+       }        
+
+	  }
+
   }
 }
