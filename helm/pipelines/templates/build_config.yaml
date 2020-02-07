@@ -30,7 +30,7 @@ spec:
     jenkinsPipelineStrategy:
       jenkinsfilePath: {{ .Values.pipeline.file_name }}
       env:
-      - name: "APPLICATION_NAME"
+      - name: "APP_NAME"
         value: "{{ .Values.application.app_name }}"
       - name: "APPLICATION_SOURCE_REPO"
         value: "{{ .Values.application.source_repo_url }}"
@@ -62,6 +62,7 @@ spec:
         name: {{ .Values.application.base_image }}
     type: Source
   successfulBuildHistoryLimit: 3
+---
 apiVersion: v1
 kind: ImageStream
 metadata:
