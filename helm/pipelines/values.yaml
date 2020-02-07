@@ -13,7 +13,9 @@ pipeline:
     image: ""
 
 application:
+  app_name: "ticket-monster"
   source_repo_url: "https://github.com/jboss-developer/ticket-monster.git"
   source_repo_ref: "2.7.0.Final-with-tutorials"
   repo_webhook_secret: "abc123"
   source_context_dir: "demo"
+  base_image: "registry.access.redhat.com/jboss-webserver-3/webserver31-tomcat8-openshift:latest"

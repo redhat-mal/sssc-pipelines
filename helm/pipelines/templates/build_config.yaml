@@ -8,7 +8,7 @@ metadata:
     chart: {{ template "pipelines.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-  name: {{ template "pipelines.name" . }}
+  name: {{ template "pipelines.name" . }}-{{ .Values.application.app_name }}
   namespace: {{ .Values.namespace }}
 spec:
   source:
@@ -30,9 +30,42 @@ spec:
     jenkinsPipelineStrategy:
       jenkinsfilePath: {{ .Values.pipeline.file_name }}
       env:
+      - name: "APPLICATION_NAME"
+        value: "{{ .Values.application.app_name }}"
       - name: "APPLICATION_SOURCE_REPO"
         value: "{{ .Values.application.source_repo_url }}"
       - name: "APPLICATION_SOURCE_REF"
         value: "{{ .Values.application.source_repo_ref }}"
       - name: "BUILD_CONTEXT_DIR"
         value: "{{ .Values.application.source_context_dir }}"
+---
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  labels:
+    application: {{ .Values.application.app_name }}
+  name: {{ .Values.application.app_name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  failedBuildHistoryLimit: 3
+  output:
+    to:
+      kind: ImageStreamTag
+      name: {{ .Values.application.app_name }}:latest
+  source:
+    binary: {}
+    type: Binary
+  strategy:
+    sourceStrategy:
+      from:
+        kind: DockerImage
+        name: {{ .Values.application.base_image }}
+    type: Source
+  successfulBuildHistoryLimit: 3
+apiVersion: v1
+kind: ImageStream
+metadata:
+  labels:
+    application: {{ .Values.application.app_name }}
+  name: {{ .Values.application.app_name }}
+  namespace: {{ .Values.namespace }}
