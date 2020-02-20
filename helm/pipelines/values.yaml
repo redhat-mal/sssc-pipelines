@@ -9,13 +9,12 @@ pipeline:
   source_repo_ref: "master"
   source_context_dir: ""
   file_name: "Jenkinsfile.tomcat"
-  agent:
-    image: ""
 
 application:
-  app_name: "ticket-monster"
-  source_repo_url: "https://github.com/jboss-developer/ticket-monster.git"
-  source_repo_ref: "2.7.0.Final-with-tutorials"
+  app_name: "spring-boot-web"
+  source_repo_url: "https://github.com/malacourse/simple-spring-boot-web.git"
+  source_repo_ref: "master"
   repo_webhook_secret: "abc123"
-  source_context_dir: "demo"
-  base_image: "registry.access.redhat.com/jboss-webserver-3/webserver31-tomcat8-openshift:latest"
+  source_context_dir: ""
+  base_image: "registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:latest"
+

@@ -87,6 +87,14 @@ pipeline {
        }        
 
 	  }
+	  stage('Build Image') {
+      agent { 
+          label 'atomic-scanner'
+      }
+      steps {
+        echo "Scanning Image using Atomc OpenScap"
+      }
+    }
 
   }
 }
