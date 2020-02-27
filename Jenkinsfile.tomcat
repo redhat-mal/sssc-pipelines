@@ -89,10 +89,12 @@ pipeline {
 	  }
 	  stage('Scan Image') {
       steps {
-        echo "Scanning Image using Anchore Scanner"
-        def imageLine = 'debian:latest'
-        writeFile file: 'anchore_images', text: imageLine
-        anchore name: 'anchore_images'     
+        step {
+          echo "Scanning Image using Anchore Scanner"
+          def imageLine = 'debian:latest'
+          writeFile file: 'anchore_images', text: imageLine
+          anchore name: 'anchore_images'
+        }     
       }
     }
 
