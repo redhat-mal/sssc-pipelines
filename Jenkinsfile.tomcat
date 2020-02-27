@@ -87,12 +87,12 @@ pipeline {
        }        
 
 	  }
-	  stage('Build Image') {
-      agent { 
-          label 'atomic-scanner'
-      }
+	  stage('Scan Image') {
       steps {
-        echo "Scanning Image using Atomc OpenScap"
+        echo "Scanning Image using Anchore Scanner"
+        def imageLine = 'debian:latest'
+        writeFile file: 'anchore_images', text: imageLine
+        anchore name: 'anchore_images'     
       }
     }
 
