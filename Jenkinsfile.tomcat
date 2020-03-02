@@ -93,7 +93,7 @@ pipeline {
         script {
           def imageLine = 'image-registry.openshift-image-registry.svc:5000/tssc-demo/spring-boot-web:latest'
           writeFile file: 'anchore_images', text: imageLine
-          anchore engineCredentialsId: 'anchore-creds', name: 'anchore_images'
+          anchore engineCredentialsId: 'anchore-creds', name: 'anchore_images', bailOnFail: false
         }
       }
     }
