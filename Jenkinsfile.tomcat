@@ -91,7 +91,7 @@ pipeline {
       steps {
         echo "Scanning Image using Anchore Scanner"
         script {
-          def imageLine = 'debian:latest'
+          def imageLine = 'image-registry.openshift-image-registry.svc:5000/tssc-demo/spring-boot-web:latest'
           writeFile file: 'anchore_images', text: imageLine
           anchore engineCredentialsId: 'anchore-creds', name: 'anchore_images'
         }
