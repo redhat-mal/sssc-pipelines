@@ -10,6 +10,7 @@ openshift.withCluster() {
   env.POM_FILE = env.BUILD_CONTEXT_DIR ? "${env.BUILD_CONTEXT_DIR}/pom.xml" : "pom.xml"
   env.TARGET = env.BUILD_CONTEXT_DIR ? "${env.BUILD_CONTEXT_DIR}/target" : "target"
   env.APP_NAME = "${APP_NAME}"
+  env.NEXUS_REPO = "${NEXUS_REPO}"
   env.BUILD = openshift.project()
   env.DEV = "${APP_NAME}-dev"
   env.STAGE = "${APP_NAME}-stage"
@@ -84,16 +85,17 @@ pipeline {
           done
         """
         binaryBuild(projectName: env.BUILD, buildConfigName: env.APP_NAME, buildFromPath: "oc-build")
-       }        
+
+      }        
 
 	  }
 	  stage('Scan Image') {
       steps {
         echo "Scanning Image using Anchore Scanner"
         script {
-          def imageLine = 'image-registry.openshift-image-registry.svc:5000/tssc-demo/spring-boot-web:latest'
+          def imageLine = '$env.NEXUS_REPO/tssc/$env.APP_NAME:latest'
           writeFile file: 'anchore_images', text: imageLine
-          anchore engineCredentialsId: 'anchore-creds', name: 'anchore_images', engineurl: 'http://v1-anchore-engine-api:8228/v1'
+          anchore engineCredentialsId: 'anchore-creds', name: 'anchore_images', engineurl: 'http://anchore-engine-api:8228/v1'
         }
       }
     }

@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-namespace: "sssc-demo"
+namespace: "tssc-demo"
 
 pipeline:
   source_repo_url: "https://github.com/redhat-mal/sssc-pipelines.git"
@@ -17,4 +17,6 @@ application:
   repo_webhook_secret: "abc123"
   source_context_dir: ""
   base_image: "registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:latest"
+  nexus_repo: "repo-nexus.apps.mikes.sandbox1072.opentlc.com" 
+  
 

@@ -32,6 +32,8 @@ spec:
       env:
       - name: "APP_NAME"
         value: "{{ .Values.application.app_name }}"
+      - name: "NEXUS_REPO"
+        value: "{{ .Values.application.nexus_repo }}"
       - name: "APPLICATION_SOURCE_REPO"
         value: "{{ .Values.application.source_repo_url }}"
       - name: "APPLICATION_SOURCE_REF"
@@ -49,9 +51,12 @@ metadata:
 spec:
   failedBuildHistoryLimit: 3
   output:
+    pushSecret:
+      name: nexus-repo3
     to:
-      kind: ImageStreamTag
-      name: {{ .Values.application.app_name }}:latest
+      kind: DockerImage
+      name: "{{ .Values.application.nexus_repo }}/tssc/{{ .Values.application.app_name }}:latest"
+      name: 
   source:
     binary: {}
     type: Binary
@@ -62,11 +67,3 @@ spec:
         name: {{ .Values.application.base_image }}
     type: Source
   successfulBuildHistoryLimit: 3
----
-apiVersion: v1
-kind: ImageStream
-metadata:
-  labels:
-    application: {{ .Values.application.app_name }}
-  name: {{ .Values.application.app_name }}
-  namespace: {{ .Values.namespace }}
