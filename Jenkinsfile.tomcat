@@ -100,5 +100,16 @@ pipeline {
       }
     }
 
+    stage('Deploy to Dev') {
+      agent {
+        label 'helm-test'
+      }
+      steps {
+        script {
+          sh "helm version"
+        }
+      }
+    }
+
   }
 }
