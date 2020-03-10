@@ -51,12 +51,11 @@ metadata:
 spec:
   failedBuildHistoryLimit: 3
   output:
-    pushSecret:
-      name: nexus-repo3
     to:
       kind: DockerImage
       name: "{{ .Values.application.nexus_repo }}/tssc/{{ .Values.application.app_name }}:latest"
-      name: 
+    pushSecret:
+      name: nexus-repo
   source:
     binary: {}
     type: Binary

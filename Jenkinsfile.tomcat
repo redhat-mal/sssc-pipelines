@@ -93,7 +93,7 @@ pipeline {
       steps {
         echo "Scanning Image using Anchore Scanner"
         script {
-          def imageLine = '$env.NEXUS_REPO/tssc/$env.APP_NAME:latest'
+          def imageLine = "${env.NEXUS_REPO}/tssc/${env.APP_NAME}:latest"
           writeFile file: 'anchore_images', text: imageLine
           anchore engineCredentialsId: 'anchore-creds', name: 'anchore_images', engineurl: 'http://anchore-engine-api:8228/v1'
         }
