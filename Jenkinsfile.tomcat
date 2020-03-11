@@ -90,6 +90,7 @@ pipeline {
       }
       steps {
         echo "Deploying ${env.APP_NAME} to OCP Project: ${env.APP_DEV_NAMESPACE}"
+        git url: "${APPLICATION_SOURCE_REPO}", branch: "${APPLICATION_SOURCE_REF}"
         script {
           sh """
             ls -lrt 
