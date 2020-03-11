@@ -22,24 +22,6 @@ openshift.withCluster() {
 
 
 pipeline {
-    //agent {
-	//  kubernetes {
-	//    label "maven-skopeo-agent"
-	//    cloud "openshift"
-	//    inheritFrom "maven"
-    //    serviceAccount 'jenkins'
-	//    containerTemplate {
-	//	  name "jnlp"
-	//	  image "image-registry.openshift-image-registry.svc:5000/openshift/jenkins-agent-maven:latest"
-	//	  resourceRequestMemory "1Gi"
-	//	  resourceLimitMemory "2Gi"
-	//	  resourceRequestCpu "200m"
-	//	  resourceLimitCpu "2"
-    //    ttyEnabled false
-    //      args '${computer.jnlpmac} ${computer.name}'
-	//    }
-	//  }
-    //}
   agent { label 'maven' }
   environment { 
       mvnCmd = "mvn -s ./nexus_settings.xml"
@@ -108,8 +90,11 @@ pipeline {
       }
       steps {
         echo "Deploying ${env.APP_NAME} to OCP Project: ${env.APP_DEV_NAMESPACE}"
+        git url: "${APPLICATION_SOURCE_REPO}", branch: "${APPLICATION_SOURCE_REF}"
         script {
           sh """
+            ls -lrt 
+            pwd
             curl -k --output deployments.tgz ${env.HELM_CHART}
             helm template v1 --values=./.helm/dev_deploy.yml deployments.tgz --set app_name=${APP_NAME} --set namespace=${APP_DEV_NAMESPACE} | oc apply -f- 
           """
