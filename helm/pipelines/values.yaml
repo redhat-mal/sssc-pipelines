@@ -19,6 +19,6 @@ application:
   source_context_dir: ""
   base_image: "registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:latest"
   nexus_repo: "repo-nexus.apps.mikes.sandbox1072.opentlc.com" 
-  helm_chart: "https://nexus-tssc-demo.apps.mikes.sandbox1072.opentlc.com/repository/helm/ocp-sssc-pipeline-0.1.0.tgz"
+  helm_chart: "https://nexus-tssc-demo.apps.mikes.sandbox1072.opentlc.com/repository/helm/deployments-0.1.0.tgz"
   
 
