@@ -12,7 +12,7 @@ openshift.withCluster() {
   env.APP_NAME = "${APP_NAME}"
   env.NEXUS_REPO = "${NEXUS_REPO}"
   env.HELM_CHART = "${HELM_CHART}"
-  env.APP_DEV_NAMESPACE = "$(APP_DEV_NAMESPACE)"
+  env.APP_DEV_NAMESPACE = "${APP_DEV_NAMESPACE}"
   env.BUILD = openshift.project()
   env.DEV = "${APP_NAME}-dev"
   env.STAGE = "${APP_NAME}-stage"
