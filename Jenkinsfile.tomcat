@@ -104,14 +104,14 @@ pipeline {
 
     stage('Deploy to Dev') {
       agent {
-        label 'helm-test'
+        label 'helm-agent'
       }
       steps {
         echo "Deploying ${env.APP_NAME} to OCP Project: ${env.APP_DEV_NAMESPACE}"
         script {
           sh """
             curl -k --output deployments.tgz ${env.HELM_CHART}
-            helm template v1 --values=./.helm/dev_deploy.yml deployments.tgz --set app_name=${APP_NAME} --set namespace=${APP_DEV_NAMESPACE} | oc apply -f- "
+            helm template v1 --values=./.helm/dev_deploy.yml deployments.tgz --set app_name=${APP_NAME} --set namespace=${APP_DEV_NAMESPACE} | oc apply -f- 
           """
         }
       }
