@@ -32,6 +32,10 @@ spec:
       env:
       - name: "APP_NAME"
         value: "{{ .Values.application.app_name }}"
+      - name: "APP_DEV_NAMESPACE"
+        value: "{{ .Values.application.app_dev_namespace }}"
+      - name: "HELM_CHART"
+        value: "{{ .Values.application.helm_chart }}"
       - name: "NEXUS_REPO"
         value: "{{ .Values.application.nexus_repo }}"
       - name: "APPLICATION_SOURCE_REPO"

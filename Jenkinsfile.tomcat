@@ -11,6 +11,8 @@ openshift.withCluster() {
   env.TARGET = env.BUILD_CONTEXT_DIR ? "${env.BUILD_CONTEXT_DIR}/target" : "target"
   env.APP_NAME = "${APP_NAME}"
   env.NEXUS_REPO = "${NEXUS_REPO}"
+  env.HELM_CHART = "${HELM_CHART}"
+  env.APP_DEV_NAMESPACE = "$(APP_DEV_NAMESPACE)"
   env.BUILD = openshift.project()
   env.DEV = "${APP_NAME}-dev"
   env.STAGE = "${APP_NAME}-stage"
@@ -105,8 +107,9 @@ pipeline {
         label 'helm-test'
       }
       steps {
+        echo "Deploying ${env.APP_NAME} to OCP Project: ${env.APP_DEV_NAMESPACE}"
         script {
-          sh "helm version"
+          sh "helm template v1 --values=./.helm/dev_deploy.yml ${env.HELM_CHART} --set app_name=${APP_NAME} --set namespace=${APP_DEV_NAMESPACE} | oc apply -f- "
         }
       }
     }
