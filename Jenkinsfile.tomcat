@@ -79,7 +79,7 @@ pipeline {
         script {
           def imageLine = "${env.NEXUS_REPO}/tssc/${env.APP_NAME}:latest"
           writeFile file: 'anchore_images', text: imageLine
-          anchore engineCredentialsId: 'anchore-creds', name: 'anchore_images', engineurl: 'http://anchore-engine-api:8228/v1'
+          anchore engineRetries: '900' engineCredentialsId: 'anchore-creds', name: 'anchore_images', engineurl: 'http://anchore-engine-api:8228/v1'
         }
       }
     }
