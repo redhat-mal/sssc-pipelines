@@ -2,8 +2,10 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-namespace: "tssc-demo"
-
+global:
+  cluster_url: "CHANGEME"
+  namespace: "tssc-demo"
+  
 pipeline:
   source_repo_url: "https://github.com/redhat-mal/sssc-pipelines.git"
   source_repo_ref: "master"
@@ -18,7 +20,8 @@ application:
   repo_webhook_secret: "abc123"
   source_context_dir: ""
   base_image: "registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:latest"
-  nexus_repo: "repo-nexus.apps.mikes.sandbox1072.opentlc.com" 
-  helm_chart: "https://nexus-tssc-demo.apps.mikes.sandbox1072.opentlc.com/repository/helm/deployments-0.1.0.tgz"
+  nexus_repo_prefix: "repo-nexus.apps" 
+  helm_chartX: "https://nexus-tssc-demo.apps.mikes.sandbox1072.opentlc.com/repository/helm/deployments-0.1.0.tgz"
+  helm_chart: "/repository/helm/deployments-0.1.0.tgz"
   
 

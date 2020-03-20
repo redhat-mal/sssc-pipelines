@@ -1,0 +1,28 @@
+#---
+#kind: ProjectRequest
+#apiVersion: project.openshift.io/v1
+#metadata:
+#  name: "{{ .Values.application.app_dev_namespace }}"
+#  creationTimestam: null
+#displayName: "{{ .Values.application.app_dev_namespace }}"
+---
+apiVersion: authorization.openshift.io/v1
+groupNames: null
+kind: RoleBinding
+metadata:
+  creationTimestamp: null
+  labels:
+    app: {{ template "pipelines.name" . }}
+    chart: {{ template "pipelines.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  name: jenkins_edit
+  namespace: "{{ .Values.application.app_dev_namespace }}"
+roleRef:
+  name: edit
+subjects:
+- kind: ServiceAccount
+  name: jenkins
+  namespace: "{{ .Values.global.namespace }}"
+userNames:
+- system:serviceaccount:{{ .Values.global.namespace }}:jenkins

@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
   annotations:
@@ -9,7 +9,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
   name: {{ template "pipelines.name" . }}-{{ .Values.application.app_name }}
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 spec:
   source:
     type: Git
@@ -35,9 +35,9 @@ spec:
       - name: "APP_DEV_NAMESPACE"
         value: "{{ .Values.application.app_dev_namespace }}"
       - name: "HELM_CHART"
-        value: "{{ .Values.application.helm_chart }}"
+        value: "https://nexus-{{ .Values.global.namespace }}.apps.{{ .Values.global.cluster_url }}{{ .Values.application.helm_chart }}"
       - name: "NEXUS_REPO"
-        value: "{{ .Values.application.nexus_repo }}"
+        value: "{{ .Values.application.nexus_repo_prefix }}.{{ .Values.global.cluster_url }}"
       - name: "APPLICATION_SOURCE_REPO"
         value: "{{ .Values.application.source_repo_url }}"
       - name: "APPLICATION_SOURCE_REF"
@@ -45,19 +45,18 @@ spec:
       - name: "BUILD_CONTEXT_DIR"
         value: "{{ .Values.application.source_context_dir }}"
 ---
-apiVersion: v1
+apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
   labels:
     application: {{ .Values.application.app_name }}
   name: {{ .Values.application.app_name }}
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.global.namespace }}
 spec:
-  failedBuildHistoryLimit: 3
   output:
     to:
       kind: DockerImage
-      name: "{{ .Values.application.nexus_repo }}/tssc/{{ .Values.application.app_name }}:latest"
+      name: "{{ .Values.application.nexus_repo_prefix }}.{{ .Values.global.cluster_url }}/tssc/{{ .Values.application.app_name }}:latest"
     pushSecret:
       name: nexus-repo
   source:
@@ -69,4 +68,8 @@ spec:
         kind: DockerImage
         name: {{ .Values.application.base_image }}
     type: Source
-  successfulBuildHistoryLimit: 3
+  triggers:
+  - type: Generic
+    generic:
+      secret: {{ .Values.application.repo_webhook_secret }}
+ 
